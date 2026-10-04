@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db/connect";
 import { Staff } from "@/models/Staff";
+import "@/models/Service";
 import { normalizeBdPhone } from "@/lib/validation/phone";
 
 export async function GET(req: NextRequest) {
@@ -23,6 +24,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: staffList });
   } catch (error: unknown) {
     const err = error as Error;
+    console.error("GET /api/staff error:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

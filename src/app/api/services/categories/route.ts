@@ -14,6 +14,7 @@ export async function GET() {
     return NextResponse.json({ success: true, data: categories });
   } catch (error: unknown) {
     const err = error as Error;
+    console.error("GET /api/services/categories error:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

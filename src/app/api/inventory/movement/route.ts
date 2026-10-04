@@ -88,6 +88,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: movements });
   } catch (error: unknown) {
     const err = error as Error;
+    console.error("GET /api/inventory/movement error:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

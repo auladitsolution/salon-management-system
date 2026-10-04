@@ -6,6 +6,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db/connect";
 import { Service } from "@/models/Service";
+import "@/models/ServiceCategory";
+import "@/models/Staff";
 import { toPoisha } from "@/lib/money/poisha";
 
 export async function GET(req: NextRequest) {
@@ -27,6 +29,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: services });
   } catch (error: unknown) {
     const err = error as Error;
+    console.error("GET /api/services error:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

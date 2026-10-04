@@ -4,6 +4,7 @@
 // ==============================================================================
 
 import mongoose from "mongoose";
+import "@/models";
 
 interface MongooseCache {
   conn: typeof mongoose | null;

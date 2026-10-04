@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db/connect";
 import { Appointment, BookingStatus } from "@/models/Appointment";
 import { SlotReservation } from "@/models/SlotReservation";
+import "@/models/Staff";
+import "@/models/Customer";
 
 const VALID_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
   pending: ["confirmed", "cancelled"],
@@ -43,6 +45,7 @@ export async function GET(
     });
   } catch (error: unknown) {
     const err = error as Error;
+    console.error("GET /api/bookings/[reference] error:", err);
     return NextResponse.json(
       { success: false, message: "সার্ভার ত্রুটি", error: err.message },
       { status: 500 }

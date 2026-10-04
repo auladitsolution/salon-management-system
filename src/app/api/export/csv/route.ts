@@ -12,6 +12,7 @@ import { Appointment } from "@/models/Appointment";
 import { Invoice } from "@/models/Invoice";
 import { Expense } from "@/models/Expense";
 import { Product } from "@/models/Product";
+import "@/models/Staff";
 import { toBdtDecimal } from "@/lib/money/poisha";
 
 function sanitizeCsvCell(val: unknown): string {
