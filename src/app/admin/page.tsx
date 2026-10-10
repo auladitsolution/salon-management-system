@@ -15,6 +15,9 @@ import {
   CreditCard,
   ArrowRight,
   Sparkles,
+  Wallet,
+  Activity,
+  ArrowUpRight,
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -90,128 +93,144 @@ export default function AdminDashboardPage() {
     {
       title: bn.dashboard.todayAppointments,
       value: toBengaliNumerals(kpis.todayAppointments),
-      sub: "আজকের মোট বুকিং",
+      sub: "আজকের মোট শিডিউল",
       icon: CalendarDays,
-      color: "text-blue-600 bg-blue-50 border-blue-100",
+      gradient: "from-blue-500 to-cyan-500",
+      shadow: "shadow-blue-500/20",
     },
     {
       title: bn.dashboard.pendingBookings,
       value: toBengaliNumerals(kpis.pendingBookings),
       sub: "অনুমোদনের অপেক্ষায়",
       icon: Clock,
-      color: "text-amber-600 bg-amber-50 border-amber-100",
+      gradient: "from-amber-500 to-orange-500",
+      shadow: "shadow-amber-500/20",
     },
     {
       title: bn.dashboard.completedServices,
       value: toBengaliNumerals(kpis.completedServices),
       sub: "সফলভাবে সমাপ্ত",
       icon: CheckCircle2,
-      color: "text-emerald-600 bg-emerald-50 border-emerald-100",
+      gradient: "from-emerald-500 to-teal-500",
+      shadow: "shadow-emerald-500/20",
     },
     {
       title: bn.dashboard.todaySales,
       value: formatBengaliCurrency(kpis.todaySalesMinor),
-      sub: "আজকের নগদ ও অনলাইন আদায়",
+      sub: "আজকের নগদ ও ডিজিটাল আদায়",
       icon: DollarSign,
-      color: "text-salon-primary bg-salon-primary-50 border-salon-primary-100",
+      gradient: "from-rose-500 to-pink-600",
+      shadow: "shadow-rose-500/20",
     },
     {
       title: bn.dashboard.monthlySales,
       value: formatBengaliCurrency(kpis.monthlySalesMinor),
-      sub: "চলতি মাসের মোট আয়",
+      sub: "চলতি মাসের মোট টার্নওভার",
       icon: TrendingUp,
-      color: "text-indigo-600 bg-indigo-50 border-indigo-100",
+      gradient: "from-purple-500 to-indigo-600",
+      shadow: "shadow-purple-500/20",
     },
     {
       title: bn.dashboard.totalCustomers,
       value: toBengaliNumerals(kpis.totalCustomers),
-      sub: "নিবন্ধিত ডাটাবেজ",
+      sub: "নিবন্ধিত সক্রিয় গ্রাহক",
       icon: Users,
-      color: "text-purple-600 bg-purple-50 border-purple-100",
+      gradient: "from-fuchsia-500 to-pink-500",
+      shadow: "shadow-fuchsia-500/20",
     },
     {
       title: bn.dashboard.totalStaff,
       value: toBengaliNumerals(kpis.totalStaff),
-      sub: "সক্রিয় স্টাইলিস্ট ও কর্মী",
+      sub: "কর্মরত স্টাইলিস্ট ও কর্মী",
       icon: UserCheck,
-      color: "text-teal-600 bg-teal-50 border-teal-100",
+      gradient: "from-teal-500 to-emerald-600",
+      shadow: "shadow-teal-500/20",
     },
     {
       title: bn.dashboard.duePayments,
       value: formatBengaliCurrency(kpis.duePaymentsMinor),
-      sub: "বকেয়া বিলের পরিমাণ",
+      sub: "মোট বকেয়া বিল",
       icon: AlertCircle,
-      color: "text-rose-600 bg-rose-50 border-rose-100",
+      gradient: "from-red-500 to-rose-600",
+      shadow: "shadow-red-500/20",
     },
   ];
 
   return (
     <div className="space-y-8">
-      {/* Header & Quick Action Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header & Quick Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-            ড্যাশবোর্ড পর্যবেক্ষণ
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">রিয়েল-টাইম ড্যাশবোর্ড</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            সেলুন ওভারভিউ ও লাইভ স্ট্যাটাস
           </h2>
-          <p className="text-xs text-gray-500 mt-1">
-            আজকের সার্বিক সেলুন পরিচালনা ও লাইভ ডেটাবেজ রিপোর্ট
+          <p className="text-xs text-slate-400 mt-0.5">
+            আজকের সার্বিক বুকিং, পেমেন্ট, ক্যাশফ্লো এবং স্টাফ ম্যানেজমেন্ট
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-3">
           <Link href="/book" target="_blank">
-            <Button size="sm" variant="outline" className="gap-1.5 text-xs">
-              <Plus className="w-3.5 h-3.5" />
-              <span>নতুন বুকিং</span>
+            <Button size="sm" variant="outline" className="gap-2 text-xs border-slate-700 bg-slate-800/80 text-slate-200 hover:text-white hover:bg-slate-700">
+              <Plus className="w-4 h-4 text-rose-400" />
+              <span>নতুন বুকিং গ্রহণ</span>
             </Button>
           </Link>
           <Link href="/admin/pos">
-            <Button size="sm" className="gap-1.5 text-xs font-bold">
-              <CreditCard className="w-3.5 h-3.5" />
-              <span>POS বিক্রয় টার্মিনাল</span>
+            <Button size="sm" variant="gold" className="gap-2 text-xs font-bold text-slate-950">
+              <CreditCard className="w-4 h-4" />
+              <span>POS ক্যাশিয়ার শুরু</span>
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* 8 Primary KPI Cards */}
+      {/* 8 Primary Colorful KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpiCards.map((card, idx) => {
           const Icon = card.icon;
           return (
-            <Card key={idx} className="p-5 border border-gray-200/80 shadow-sm hover:shadow-md transition-all">
+            <div
+              key={idx}
+              className="p-5 rounded-3xl bg-slate-950/80 border border-slate-800/90 shadow-lg hover:border-slate-700 transition-all duration-300 hover:-translate-y-1 group"
+            >
               <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <span className="text-xs font-medium text-gray-500">{card.title}</span>
-                  <div className="text-2xl font-bold text-gray-900 tracking-tight">
+                <div className="space-y-1.5">
+                  <span className="text-xs font-bold text-slate-400">{card.title}</span>
+                  <div className="text-2xl font-black text-white tracking-tight">
                     {loading ? "..." : card.value}
                   </div>
-                  <span className="text-[11px] text-gray-400 block">{card.sub}</span>
+                  <span className="text-[11px] text-slate-500 font-semibold block">{card.sub}</span>
                 </div>
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${card.color}`}>
+                <div className={`w-11 h-11 rounded-2xl bg-gradient-to-tr ${card.gradient} text-white flex items-center justify-center shadow-lg ${card.shadow} group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className="w-5 h-5" />
                 </div>
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>
 
-      {/* Two Column: Recent Appointments & Quick Operations */}
+      {/* Two Columns: Recent Bookings & Quick Operations */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
         {/* Recent Appointments Table */}
         <div className="lg:col-span-8">
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+          <div className="p-6 rounded-3xl bg-slate-950/80 border border-slate-800/90 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div>
-                <h3 className="font-bold text-gray-900 text-base">আজকের ও সাম্প্রতিক বুকিং</h3>
-                <p className="text-xs text-gray-500">অনলাইন ও ওয়াক-ইন অ্যাপয়েন্টমেন্ট তালিকা</p>
+                <h3 className="font-extrabold text-white text-base">সাম্প্রতিক ও আজকের বুকিং তালিকা</h3>
+                <p className="text-xs text-slate-400">অনলাইন ও ওয়াক-ইন অ্যাপয়েন্টমেন্টের লাইভ হালনাগাদ</p>
               </div>
               <Link
                 href="/admin/appointments"
-                className="text-xs font-semibold text-salon-primary hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1.5 transition-colors"
               >
-                <span>সব দেখুন</span>
+                <span>সকল বুকিং দেখুন</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -219,45 +238,43 @@ export default function AdminDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-gray-100 text-gray-500 font-semibold">
+                  <tr className="border-b border-slate-800 text-slate-400 font-bold">
                     <th className="pb-3">রেফারেন্স</th>
                     <th className="pb-3">গ্রাহক</th>
-                    <th className="pb-3">সময়</th>
+                    <th className="pb-3">সময়সূচি</th>
                     <th className="pb-3">স্টাইলিস্ট</th>
-                    <th className="pb-3">মূল্য</th>
+                    <th className="pb-3">বিল</th>
                     <th className="pb-3">অবস্থা</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-slate-800/60">
                   {recentAppointments.length > 0 ? (
                     recentAppointments.map((appt) => (
-                      <tr key={appt._id} className="hover:bg-gray-50/80 transition-colors">
-                        <td className="py-3 font-mono font-medium text-salon-primary">
+                      <tr key={appt._id} className="hover:bg-slate-900/60 transition-colors">
+                        <td className="py-3.5 font-mono font-bold text-rose-400">
                           {appt.bookingReference}
                         </td>
-                        <td className="py-3 font-semibold text-gray-900">
-                          {appt.customerName}
-                          <span className="block text-[10px] text-gray-400 font-normal">
-                            {appt.customerPhone}
-                          </span>
+                        <td className="py-3.5">
+                          <span className="font-bold text-slate-100 block">{appt.customerName}</span>
+                          <span className="text-[10px] text-slate-400 font-medium">{appt.customerPhone}</span>
                         </td>
-                        <td className="py-3 text-gray-600">
+                        <td className="py-3.5 text-slate-300 font-medium">
                           {formatBengaliTime(appt.startTime)}
                         </td>
-                        <td className="py-3 text-gray-700">
+                        <td className="py-3.5 text-slate-300">
                           {appt.staffId?.fullName || "যেকোনো কর্মী"}
                         </td>
-                        <td className="py-3 font-bold text-gray-900">
+                        <td className="py-3.5 font-black text-amber-400">
                           {formatBengaliCurrency(appt.totalMinor)}
                         </td>
-                        <td className="py-3">
+                        <td className="py-3.5">
                           <Badge variant={appt.bookingStatus as unknown as any} />
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={6} className="text-center py-8 text-gray-400">
+                      <td colSpan={6} className="text-center py-10 text-slate-500 font-medium">
                         {loading ? "তথ্য লোড হচ্ছে..." : "বর্তমানে কোনো সাম্প্রতিক বুকিং নেই"}
                       </td>
                     </tr>
@@ -265,79 +282,89 @@ export default function AdminDashboardPage() {
                 </tbody>
               </table>
             </div>
-          </Card>
+          </div>
         </div>
 
-        {/* Quick Operations & Inventory Warning */}
+        {/* Quick Operations & Business Cashflow Card */}
         <div className="lg:col-span-4 space-y-6">
-          <Card className="p-6">
-            <h3 className="font-bold text-gray-900 text-base mb-3">দ্রুত পরিচালনা</h3>
-            <div className="space-y-2">
-              <Link href="/admin/pos" className="block">
-                <div className="p-3 rounded-xl border border-gray-200 hover:border-salon-primary hover:bg-salon-primary-50/50 transition-all flex items-center justify-between">
+          <div className="p-6 rounded-3xl bg-slate-950/80 border border-slate-800/90 shadow-xl space-y-3.5">
+            <h3 className="font-extrabold text-white text-base">দ্রুত এক্সেস</h3>
+            
+            <div className="space-y-2.5">
+              <Link href="/admin/pos" className="block group">
+                <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 group-hover:border-amber-500/60 transition-all flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-salon-primary-100 text-salon-primary flex items-center justify-center">
-                      <CreditCard className="w-4 h-4" />
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-slate-950 flex items-center justify-center font-bold">
+                      <CreditCard className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-gray-800">POS ক্যাশিয়ার শুরু করুন</h4>
-                      <p className="text-[10px] text-gray-400">বিলিং ও রসিদ তৈরি</p>
+                      <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-400 transition-colors">POS ক্যাশিয়ার টার্মিনাল</h4>
+                      <p className="text-[10px] text-slate-400">দ্রুত বিলিং ও রসিদ প্রিন্ট</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-400" />
+                  <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
                 </div>
               </Link>
 
-              <Link href="/admin/appointments" className="block">
-                <div className="p-3 rounded-xl border border-gray-200 hover:border-salon-primary hover:bg-salon-primary-50/50 transition-all flex items-center justify-between">
+              <Link href="/admin/appointments" className="block group">
+                <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 group-hover:border-rose-500/60 transition-all flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                      <CalendarDays className="w-4 h-4" />
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-purple-600 text-white flex items-center justify-center">
+                      <CalendarDays className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-gray-800">অ্যাপয়েন্টমেন্ট অনুমোদন</h4>
-                      <p className="text-[10px] text-gray-400">চেক-ইন ও সার্ভিস পরিচালনা</p>
+                      <h4 className="text-xs font-bold text-slate-100 group-hover:text-rose-400 transition-colors">অ্যাপয়েন্টমেন্ট অনুমোদন</h4>
+                      <p className="text-[10px] text-slate-400">চেক-ইন ও স্ট্যাটাস আপডেট</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-400" />
+                  <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-rose-400 group-hover:translate-x-0.5 transition-all" />
                 </div>
               </Link>
 
-              <Link href="/admin/inventory" className="block">
-                <div className="p-3 rounded-xl border border-gray-200 hover:border-salon-primary hover:bg-salon-primary-50/50 transition-all flex items-center justify-between">
+              <Link href="/admin/inventory" className="block group">
+                <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 group-hover:border-amber-500/60 transition-all flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
-                      <AlertCircle className="w-4 h-4" />
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
+                      <AlertCircle className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-gray-800">স্বল্প স্টকের অ্যালার্ট ({toBengaliNumerals(kpis.lowStockCount)})</h4>
-                      <p className="text-[10px] text-gray-400">পণ্য পুনঃক্রয় প্রয়োজন</p>
+                      <h4 className="text-xs font-bold text-slate-100">স্বল্প স্টকের অ্যালার্ট ({toBengaliNumerals(kpis.lowStockCount)})</h4>
+                      <p className="text-[10px] text-slate-400">পণ্য পুনঃক্রয় প্রয়োজন</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-400" />
+                  <ArrowRight className="w-4 h-4 text-slate-500" />
                 </div>
               </Link>
             </div>
-          </Card>
+          </div>
 
-          {/* Business Balance Card */}
-          <Card className="p-6 bg-gradient-to-br from-salon-dark to-salon-primary text-white space-y-4">
-            <span className="text-xs text-salon-secondary uppercase font-semibold tracking-wider">
-              চলতি মাসের অপারেটিং ক্যাশ
-            </span>
-            <div className="text-3xl font-bold">
+          {/* Operating Balance Card */}
+          <div className="relative rounded-3xl overflow-hidden p-6 bg-gradient-to-br from-rose-950 via-slate-950 to-purple-950 border border-rose-500/30 shadow-xl space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-rose-300 uppercase font-black tracking-wider flex items-center gap-1.5">
+                <Wallet className="w-4 h-4 text-amber-400" />
+                <span>চলতি মাসের অপারেটিং ক্যাশ</span>
+              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            </div>
+
+            <div className="text-3xl font-black text-white tracking-tight">
               {formatBengaliCurrency(kpis.netOperatingCashMinor)}
             </div>
-            <p className="text-xs text-gray-300 leading-relaxed">
-              চলতি মাসের মোট আয় {formatBengaliCurrency(kpis.monthlySalesMinor)} থেকে মোট খরচ {formatBengaliCurrency(kpis.monthlyExpenseMinor)} বাদে নগদ উদ্বৃত্ত।
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              চলতি মাসের মোট আয় {formatBengaliCurrency(kpis.monthlySalesMinor)} থেকে খরচ {formatBengaliCurrency(kpis.monthlyExpenseMinor)} বাদ দিয়ে নিট পরিচালন উদ্বৃত্ত।
             </p>
-            <div className="pt-2 border-t border-white/10">
-              <Link href="/admin/reports" className="text-xs text-salon-secondary font-semibold hover:underline">
-                বিস্তারিত রিপোর্ট দেখুন →
+
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+              <Link href="/admin/reports" className="text-xs font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1">
+                <span>পূর্ণাঙ্গ আর্থিক প্রতিবেদন</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
-          </Card>
+          </div>
         </div>
+
       </div>
     </div>
   );

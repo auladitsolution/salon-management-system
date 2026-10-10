@@ -14,8 +14,10 @@ import {
   AlertCircle,
   Receipt,
   Search,
+  Sparkles,
+  ArrowRight,
+  Wallet,
 } from "lucide-react";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { formatBengaliCurrency, toBengaliNumerals, toPoisha, calculatePosTotals, toBdtDecimal } from "@/lib/money/poisha";
@@ -102,21 +104,19 @@ export default function PosPage() {
         if (prodRes.success) setProducts(prodRes.data);
         if (staffRes.success) setStaffList(staffRes.data);
       } catch (err) {
-        console.error("POS load error:", err);
+        console.error("POS Catalog fetch error:", err);
       }
     }
     loadCatalog();
   }, []);
 
-  // Add Item to Cart
+  // Add Item to Cart Helper
   const addServiceToCart = (s: CatalogService) => {
-    const existing = cart.find((i) => i.type === "service" && i.referenceId === s._id);
-    if (existing) {
+    const existingIndex = cart.findIndex((i) => i.referenceId === s._id && i.type === "service");
+    if (existingIndex > -1) {
       setCart(
-        cart.map((i) =>
-          i.type === "service" && i.referenceId === s._id
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
+        cart.map((item, idx) =>
+          idx === existingIndex ? { ...item, quantity: item.quantity + 1 } : item
         )
       );
     } else {
@@ -135,17 +135,12 @@ export default function PosPage() {
   };
 
   const addProductToCart = (p: CatalogProduct) => {
-    if (p.currentStock <= 0) {
-      setErrorMessage(`${p.name} পণ্যটির স্টক শেষ!`);
-      return;
-    }
-    const existing = cart.find((i) => i.type === "product" && i.referenceId === p._id);
-    if (existing) {
+    if (p.currentStock <= 0) return;
+    const existingIndex = cart.findIndex((i) => i.referenceId === p._id && i.type === "product");
+    if (existingIndex > -1) {
       setCart(
-        cart.map((i) =>
-          i.type === "product" && i.referenceId === p._id
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
+        cart.map((item, idx) =>
+          idx === existingIndex ? { ...item, quantity: item.quantity + 1 } : item
         )
       );
     } else {
@@ -241,47 +236,57 @@ export default function PosPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-            পয়েন্ট অফ সেল (POS ক্যাশিয়ার)
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">পয়েন্ট অফ সেল (POS)</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            ক্যাশিয়ার বিলিং টার্মিনাল
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
-            ওয়াক-ইন ও কাস্টমার বিলিং, স্প্লিট পেমেন্ট এবং তাৎক্ষণিক রসিদ
+          <p className="text-xs text-slate-400 mt-0.5">
+            ওয়াক-ইন ও রেজিস্টার্ড কাস্টমার বিলিং, মাল্টি-পেমেন্ট এবং তাৎক্ষণিক ভ্যাট রসিদ তৈরি
           </p>
         </div>
       </div>
 
       {errorMessage && (
-        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       {/* POS Two-Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Col: Catalog Explorer (Services & Retail Products) */}
-        <div className="lg:col-span-7 space-y-4">
-          <Card className="p-5">
-            <div className="relative mb-4">
-              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+        
+        {/* Left Col: Catalog Explorer */}
+        <div className="lg:col-span-7 space-y-5">
+          <div className="p-6 rounded-3xl bg-slate-950/80 border border-slate-800/90 shadow-xl space-y-5">
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="সার্ভিস বা পণ্য অনুসন্ধান করুন..."
+                placeholder="সার্ভিস বা কসমেটিক্স পণ্য অনুসন্ধান করুন..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-salon-primary"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-rose-500"
               />
             </div>
 
             {/* Services Section */}
             <div className="space-y-3">
-              <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Scissors className="w-3.5 h-3.5 text-salon-primary" />
-                <span>সেলুন সার্ভিসসমূহ</span>
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-black text-rose-400 uppercase tracking-wider flex items-center gap-2">
+                  <Scissors className="w-4 h-4 text-rose-500" />
+                  <span>সেলুন সার্ভিসসমূহ ({toBengaliNumerals(services.length)})</span>
+                </h3>
+                <span className="text-[11px] text-slate-500">ক্লিক করে কার্টে যোগ করুন</span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-60 overflow-y-auto pr-1">
                 {services
                   .filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
                   .map((s) => (
@@ -289,12 +294,12 @@ export default function PosPage() {
                       key={s._id}
                       type="button"
                       onClick={() => addServiceToCart(s)}
-                      className="p-2.5 rounded-xl border border-gray-200 hover:border-salon-primary hover:bg-salon-primary-50/50 text-left transition-all group flex flex-col justify-between"
+                      className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-rose-500/60 hover:bg-slate-900 text-left transition-all duration-200 group flex flex-col justify-between"
                     >
-                      <span className="text-xs font-bold text-gray-800 line-clamp-1 group-hover:text-salon-primary">
+                      <span className="text-xs font-bold text-slate-200 line-clamp-2 group-hover:text-rose-400">
                         {s.name}
                       </span>
-                      <span className="text-[11px] font-semibold text-salon-primary mt-2">
+                      <span className="text-xs font-black text-amber-400 mt-2 block">
                         {formatBengaliCurrency(s.priceMinor)}
                       </span>
                     </button>
@@ -303,12 +308,15 @@ export default function PosPage() {
             </div>
 
             {/* Retail Products Section */}
-            <div className="space-y-3 pt-4 border-t border-gray-100">
-              <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Package className="w-3.5 h-3.5 text-salon-primary" />
-                <span>রিটেল কসমেটিক্স ও পণ্য</span>
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1">
+            <div className="space-y-3 pt-5 border-t border-slate-800">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-black text-purple-400 uppercase tracking-wider flex items-center gap-2">
+                  <Package className="w-4 h-4 text-purple-500" />
+                  <span>রিটেল প্রডাক্টস ও কসমেটিক্স ({toBengaliNumerals(products.length)})</span>
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-60 overflow-y-auto pr-1">
                 {products
                   .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
                   .map((p) => (
@@ -317,51 +325,54 @@ export default function PosPage() {
                       type="button"
                       disabled={p.currentStock <= 0}
                       onClick={() => addProductToCart(p)}
-                      className="p-2.5 rounded-xl border border-gray-200 hover:border-salon-primary hover:bg-salon-primary-50/50 text-left transition-all group flex flex-col justify-between disabled:opacity-40"
+                      className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-purple-500/60 hover:bg-slate-900 text-left transition-all duration-200 group flex flex-col justify-between disabled:opacity-30"
                     >
                       <div>
-                        <span className="text-xs font-bold text-gray-800 line-clamp-1 group-hover:text-salon-primary">
+                        <span className="text-xs font-bold text-slate-200 line-clamp-1 group-hover:text-purple-400">
                           {p.name}
                         </span>
-                        <span className="text-[10px] text-gray-400 block mt-0.5">
+                        <span className="text-[10px] text-slate-500 block mt-0.5 font-semibold">
                           স্টক: {toBengaliNumerals(p.currentStock)} {p.unit}
                         </span>
                       </div>
-                      <span className="text-[11px] font-semibold text-salon-primary mt-2">
+                      <span className="text-xs font-black text-emerald-400 mt-2 block">
                         {formatBengaliCurrency(p.sellingPriceMinor)}
                       </span>
                     </button>
                   ))}
               </div>
             </div>
-          </Card>
+          </div>
         </div>
 
         {/* Right Col: Bill Cart & Payment Processing */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="p-5">
-            <h3 className="text-base font-bold text-gray-900 pb-3 border-b border-gray-100 flex items-center justify-between">
-              <span>বিলিং কার্ট ({toBengaliNumerals(cart.length)})</span>
+          <div className="p-6 rounded-3xl bg-slate-950/80 border border-slate-800/90 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                <Receipt className="w-4 h-4 text-amber-400" />
+                <span>বিলিং কার্ট ({toBengaliNumerals(cart.length)})</span>
+              </h3>
               {cart.length > 0 && (
                 <button
                   onClick={() => setCart([])}
-                  className="text-xs text-rose-600 hover:underline"
+                  className="text-xs text-rose-400 hover:text-rose-300 font-bold"
                 >
                   সব মুছুন
                 </button>
               )}
-            </h3>
+            </div>
 
             {/* Cart Items List */}
-            <div className="space-y-2 py-3 max-h-52 overflow-y-auto pr-1">
+            <div className="space-y-2 py-1 max-h-56 overflow-y-auto pr-1">
               {cart.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs"
+                  className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs"
                 >
                   <div className="space-y-1">
-                    <span className="font-bold text-gray-800">{item.name}</span>
-                    <div className="flex items-center gap-2 text-[10px] text-gray-500">
+                    <span className="font-bold text-slate-200 block">{item.name}</span>
+                    <div className="flex items-center gap-2 text-[10px] text-slate-400">
                       <span>৳{item.unitPrice} × {item.quantity}</span>
                       {item.type === "service" && staffList.length > 0 && (
                         <select
@@ -371,7 +382,7 @@ export default function PosPage() {
                             newCart[idx].staffId = e.target.value;
                             setCart(newCart);
                           }}
-                          className="bg-white border rounded px-1 text-[10px]"
+                          className="bg-slate-800 border border-slate-700 text-slate-200 rounded-lg px-2 py-0.5 text-[10px] focus:outline-none"
                         >
                           {staffList.map((st) => (
                             <option key={st._id} value={st._id}>
@@ -384,12 +395,12 @@ export default function PosPage() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="font-bold text-gray-900">
+                    <span className="font-black text-amber-400 text-sm">
                       {formatBengaliCurrency(toPoisha(item.unitPrice * item.quantity))}
                     </span>
                     <button
                       onClick={() => removeItem(idx)}
-                      className="text-gray-400 hover:text-rose-600"
+                      className="text-slate-500 hover:text-rose-400 p-1"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -398,32 +409,38 @@ export default function PosPage() {
               ))}
 
               {cart.length === 0 && (
-                <p className="text-center py-6 text-xs text-gray-400">
-                  কার্টে কোনো আইটেম নেই। বামের তালিকা থেকে যোগ করুন।
+                <p className="text-center py-8 text-xs text-slate-500 font-semibold">
+                  কার্ট বর্তমানে খালি। বামের তালিকা থেকে আইটেম সিলেক্ট করুন।
                 </p>
               )}
             </div>
 
-            {/* Customer Details Inputs */}
-            <div className="grid grid-cols-2 gap-3 py-3 border-t border-gray-100">
-              <Input
-                label="গ্রাহকের নাম"
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
-                className="text-xs py-1.5"
-              />
-              <Input
-                label="মোবাইল নম্বর"
-                value={customerPhone}
-                onChange={(e) => setCustomerPhone(e.target.value)}
-                className="text-xs py-1.5"
-              />
+            {/* Customer Inputs */}
+            <div className="grid grid-cols-2 gap-3 py-3 border-t border-slate-800">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 mb-1">গ্রাহকের নাম</label>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-rose-500"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 mb-1">মোবাইল নম্বর</label>
+                <input
+                  type="text"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-rose-500"
+                />
+              </div>
             </div>
 
             {/* Discount and Tax */}
-            <div className="grid grid-cols-2 gap-3 pb-3">
+            <div className="grid grid-cols-2 gap-3 pb-2">
               <div>
-                <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                <label className="block text-[11px] font-bold text-slate-400 mb-1">
                   ছাড় / ডিসকাউন্ট (টাকা)
                 </label>
                 <input
@@ -431,11 +448,11 @@ export default function PosPage() {
                   min="0"
                   value={discountBdt}
                   onChange={(e) => setDiscountBdt(Number(e.target.value))}
-                  className="w-full rounded-xl border border-gray-200 px-3 py-1.5 text-xs focus:ring-1 focus:ring-salon-primary"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                <label className="block text-[11px] font-bold text-slate-400 mb-1">
                   ভ্যাট / ট্যাক্স (%)
                 </label>
                 <input
@@ -443,14 +460,14 @@ export default function PosPage() {
                   min="0"
                   value={taxPercent}
                   onChange={(e) => setTaxPercent(Number(e.target.value))}
-                  className="w-full rounded-xl border border-gray-200 px-3 py-1.5 text-xs focus:ring-1 focus:ring-salon-primary"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
             </div>
 
             {/* Payment Method Selector */}
-            <div className="space-y-1.5 pb-3">
-              <label className="block text-[11px] font-medium text-gray-600">
+            <div className="space-y-1.5 pb-2">
+              <label className="block text-[11px] font-bold text-slate-400">
                 পেমেন্ট মাধ্যম
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -466,10 +483,10 @@ export default function PosPage() {
                     key={m.id}
                     type="button"
                     onClick={() => setPaymentMethod(m.id)}
-                    className={`py-1.5 rounded-lg text-[11px] font-semibold border transition-all ${
+                    className={`py-2 rounded-xl text-xs font-bold border transition-all ${
                       paymentMethod === m.id
-                        ? "bg-salon-primary text-white border-salon-primary"
-                        : "bg-white text-gray-700 border-gray-200 hover:border-salon-primary"
+                        ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20"
+                        : "bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700"
                     }`}
                   >
                     {m.label}
@@ -479,38 +496,39 @@ export default function PosPage() {
             </div>
 
             {paymentMethod !== "cash" && (
-              <div className="pb-3">
-                <Input
-                  label="ট্রানজেকশন রেফারেন্স / TRX ID (ঐচ্ছিক)"
+              <div className="pb-2">
+                <label className="block text-[11px] font-bold text-slate-400 mb-1">TRX ID / রেফারেন্স</label>
+                <input
+                  type="text"
                   placeholder="যেমন: 9J3K8L2P"
                   value={trxId}
                   onChange={(e) => setTrxId(e.target.value)}
-                  className="text-xs py-1.5"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
             )}
 
             {/* Poisha Totals Summary */}
-            <div className="space-y-1.5 pt-3 border-t border-gray-100 text-xs">
-              <div className="flex justify-between text-gray-600">
+            <div className="space-y-2 pt-3 border-t border-slate-800 text-xs">
+              <div className="flex justify-between text-slate-400">
                 <span>উপমোট:</span>
-                <span>{formatBengaliCurrency(totals.subtotalMinor)}</span>
+                <span className="font-semibold text-slate-200">{formatBengaliCurrency(totals.subtotalMinor)}</span>
               </div>
               {totals.discountMinor > 0 && (
-                <div className="flex justify-between text-emerald-600">
+                <div className="flex justify-between text-emerald-400">
                   <span>ছাড়:</span>
                   <span>- {formatBengaliCurrency(totals.discountMinor)}</span>
                 </div>
               )}
               {totals.taxMinor > 0 && (
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-slate-400">
                   <span>ভ্যাট ({taxPercent}%):</span>
                   <span>+ {formatBengaliCurrency(totals.taxMinor)}</span>
                 </div>
               )}
-              <div className="flex justify-between font-bold text-sm text-gray-900 pt-1 border-t border-gray-100">
-                <span>সর্বমোট বিল:</span>
-                <span className="text-salon-primary text-base">
+              <div className="flex justify-between font-extrabold text-sm pt-2 border-t border-slate-800">
+                <span className="text-white">সর্বমোট বিল:</span>
+                <span className="text-amber-400 text-lg">
                   {formatBengaliCurrency(totals.totalAmountMinor)}
                 </span>
               </div>
@@ -518,29 +536,31 @@ export default function PosPage() {
 
             <Button
               type="button"
+              variant="gold"
               size="lg"
               disabled={cart.length === 0}
               isLoading={loading}
               onClick={handleCheckout}
-              className="w-full mt-4 font-bold"
+              className="w-full mt-4 font-black text-slate-950 shadow-glow-gold"
             >
-              চেকআউট ও রসিদ তৈরি (৳)
+              <CreditCard className="w-5 h-5 mr-1" />
+              <span>চেকআউট ও রসিদ তৈরি</span>
             </Button>
-          </Card>
+          </div>
         </div>
       </div>
 
       {/* Printable Receipt Modal */}
       {successInvoice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-white rounded-3xl max-w-md w-full p-7 space-y-5 shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto text-slate-900">
             {/* Printable Content */}
             <div id="printable-receipt" className="space-y-4 text-center font-mono text-xs">
               <div className="space-y-1 border-b pb-3">
-                <h3 className="font-bold text-base font-sans">গ্ল্যামার লাউঞ্জ ও সেলুন</h3>
+                <h3 className="font-black text-lg font-sans text-slate-900">গ্ল্যামার লাউঞ্জ ও সেলুন</h3>
                 <p className="text-[11px] text-gray-500 font-sans">রোড ৪/এ, ধানমন্ডি, ঢাকা</p>
                 <p className="text-[11px] text-gray-500 font-sans">ফোন: 01700000000</p>
-                <p className="font-bold text-xs pt-1 text-salon-primary font-mono">
+                <p className="font-bold text-xs pt-1 text-rose-600 font-mono">
                   ইনভয়েস: {successInvoice.invoiceNumber}
                 </p>
               </div>
@@ -592,25 +612,26 @@ export default function PosPage() {
               </div>
 
               <p className="pt-3 text-[10px] text-gray-500 font-sans">
-                আমাদের সেবা গ্রহণের জন্য ধন্যবাদ! আবার আসবেন।
+                আমাদের সেবা গ্রহণের জন্য আন্তরিক ধন্যবাদ!
               </p>
             </div>
 
             {/* Action buttons */}
-            <div className="flex gap-2 pt-2 border-t">
+            <div className="flex gap-3 pt-2 border-t">
               <Button
                 variant="outline"
                 size="md"
                 onClick={() => window.print()}
-                className="w-full gap-2 text-xs"
+                className="w-full gap-2 text-xs font-bold"
               >
                 <Printer className="w-4 h-4" />
                 <span>প্রিন্ট রসিদ</span>
               </Button>
               <Button
+                variant="primary"
                 size="md"
                 onClick={() => setSuccessInvoice(null)}
-                className="w-full text-xs"
+                className="w-full text-xs font-bold"
               >
                 পরবর্তী বিক্রয়
               </Button>

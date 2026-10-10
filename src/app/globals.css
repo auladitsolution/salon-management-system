@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #FFF9F6;
-  --foreground: #272126;
-  --primary: #6D3D50;
-  --secondary: #D9B8A5;
+  --background: #FAF7F5;
+  --foreground: #1E1622;
+  --primary: #8B2653;
+  --primary-light: #FDF4F7;
+  --secondary: #E8C2A8;
 }
 
 body {
@@ -17,6 +18,66 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(247, 209, 225, 0.4);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px -8px rgba(139, 38, 83, 0.12), 0 0 0 1px rgba(184, 47, 107, 0.2);
+}
+
+/* Vibrant Gradient Text */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #B82F6B 0%, #8B2653 40%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-rainbow {
+  background: linear-gradient(135deg, #F43F5E 0%, #A855F7 50%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ambient Radial Mesh Backgrounds */
+.bg-mesh-salon {
+  background-color: #FAF6F0;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.06) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(227, 117, 166, 0.08) 0px, transparent 50%);
+}
+
+.bg-mesh-admin {
+  background-color: #F8FAFC;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(139, 38, 83, 0.05) 0px, transparent 40%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 40%),
+    radial-gradient(at 50% 100%, rgba(245, 158, 11, 0.04) 0px, transparent 50%);
+}
+
 /* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -24,14 +85,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #F3EBF0;
+  background: #FBE8F0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #A96F89;
+  background: linear-gradient(180deg, #E375A6, #B82F6B);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6D3D50;
+  background: #8B2653;
 }
+

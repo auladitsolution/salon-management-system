@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Scissors, Lock, Mail, ShieldAlert, CheckCircle2 } from "lucide-react";
+import { Scissors, Lock, Mail, ShieldAlert, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
@@ -18,12 +18,10 @@ export default function LoginPage() {
 
   // Quick Demo Login for Administrator
   const handleQuickAdminLogin = () => {
-    // In production with Firebase, sign-in token is exchanged with /api/auth/sync
-    // For direct preview and administrative testing, we navigate to /admin
     setLoading(true);
     setTimeout(() => {
       router.push("/admin");
-    }, 600);
+    }, 400);
   };
 
   // First time bootstrap trigger
@@ -42,7 +40,7 @@ export default function LoginPage() {
         setStatusMessage(data.message || "বুটস্ট্র্যাপ সফল হয়েছে!");
       } else {
         setIsSuccess(false);
-        setStatusMessage(data.message || "বুটস্ট্র্যাপ ব্যর্থ হয়েছে বা ইতোমধ্যে সম্পন্ন হয়েছে।");
+        setStatusMessage(data.message || "বুটস্ট্র্যাপ ইতোমধ্যে সম্পন্ন হয়েছে।");
       }
     } catch {
       setStatusMessage("সার্ভারে সংযোগ ব্যর্থ হয়েছে।");
@@ -52,30 +50,37 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-salon-cream">
-      <Card className="w-full max-w-md p-8 shadow-xl border border-salon-primary/10 space-y-6">
-        <div className="text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 text-salon-primary font-bold">
-            <div className="w-10 h-10 rounded-xl bg-salon-primary text-white flex items-center justify-center">
-              <Scissors className="w-5 h-5 -rotate-45" />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-mesh-salon relative overflow-hidden">
+      {/* Background Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="w-full max-w-md p-8 rounded-3xl bg-white/95 backdrop-blur-2xl border border-rose-100/90 shadow-2xl space-y-6 relative z-10">
+        <div className="text-center space-y-2.5">
+          <Link href="/" className="inline-flex items-center gap-3 text-salon-primary font-bold group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 via-salon-primary to-purple-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
+              <Scissors className="w-6 h-6 -rotate-45" />
             </div>
-            <span className="text-xl">গ্ল্যামার সেলুন ম্যানেজমেন্ট</span>
+            <div className="text-left">
+              <span className="text-lg font-black text-slate-900 block leading-tight">গ্ল্যামার সেলুন</span>
+              <span className="text-[10px] text-rose-600 font-bold uppercase tracking-wider">ম্যানেজমেন্ট পোর্টাল</span>
+            </div>
           </Link>
-          <h1 className="text-2xl font-extrabold text-salon-dark pt-2">সিস্টেমে লগইন করুন</h1>
-          <p className="text-xs text-salon-muted">
-            অ্যাডমিন, ম্যানেজার বা স্টাফ অ্যাকাউন্টে প্রবেশের জন্য তথ্য দিন
+          <h1 className="text-2xl font-black text-slate-900 pt-2 tracking-tight">সিস্টেমে লগইন করুন</h1>
+          <p className="text-xs text-slate-500">
+            অ্যাডমিন, ক্যাশিয়ার বা ম্যানেজার অ্যাকাউন্টে প্রবেশের তথ্য দিন
           </p>
         </div>
 
         {statusMessage && (
           <div
-            className={`p-3 rounded-xl text-xs flex items-start gap-2 ${
+            className={`p-3.5 rounded-2xl text-xs font-bold flex items-start gap-2.5 ${
               isSuccess
                 ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                 : "bg-amber-50 text-amber-800 border border-amber-200"
             }`}
           >
-            {isSuccess ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <ShieldAlert className="w-4 h-4 shrink-0" />}
+            {isSuccess ? <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" /> : <ShieldAlert className="w-4 h-4 shrink-0 text-amber-600" />}
             <span>{statusMessage}</span>
           </div>
         )}
@@ -88,7 +93,7 @@ export default function LoginPage() {
           className="space-y-4"
         >
           <Input
-            label="ইমেইল ঠিকানা"
+            label="ইমেইল অ্যাড্রেস"
             type="email"
             placeholder="admin@auladit.com"
             value={email}
@@ -105,46 +110,41 @@ export default function LoginPage() {
             leftIcon={<Lock className="w-4 h-4" />}
           />
 
-          <Button type="submit" size="lg" isLoading={loading} className="w-full font-bold">
-            লগইন করুন
-          </Button>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              isLoading={loading}
+              className="w-full gap-2 font-bold shadow-glow"
+            >
+              <span>লগইন করুন</span>
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
         </form>
 
-        <div className="relative my-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-salon-primary/10" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-salon-muted">অথবা সরাসরি টেস্ট অ্যাক্সেস</span>
-          </div>
-        </div>
-
-        <div className="space-y-3">
+        <div className="pt-4 border-t border-rose-100 space-y-3">
           <Button
-            variant="outline"
+            type="button"
+            variant="gold"
             size="md"
             onClick={handleQuickAdminLogin}
-            className="w-full font-semibold"
+            className="w-full font-black text-slate-950"
           >
-            অ্যাডমিন ড্যাশবোর্ড টেস্ট প্রবেশ
+            <Sparkles className="w-4 h-4" />
+            <span>সরাসরি ডেমো অ্যাডমিন এক্সেস</span>
           </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
+            type="button"
             onClick={handleBootstrapInit}
-            className="w-full text-xs text-salon-muted hover:text-salon-primary"
+            className="w-full text-center text-[11px] text-slate-500 hover:text-rose-600 font-semibold"
           >
-            প্রথমবার অ্যাডমিন বুটস্ট্র্যাপ চালান
-          </Button>
+            প্রথমবার ডাটাবেজ বুটস্ট্র্যাপ রান করতে এখানে ক্লিক করুন
+          </button>
         </div>
-
-        <div className="text-center pt-2">
-          <Link href="/" className="text-xs text-salon-primary hover:underline font-medium">
-            ← মূল ওয়েবসাইটে ফিরে যান
-          </Link>
-        </div>
-      </Card>
+      </div>
     </div>
   );
 }

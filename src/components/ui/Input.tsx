@@ -16,11 +16,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-salon-dark">
+          <label htmlFor={inputId} className="block text-sm font-semibold text-salon-dark">
             {label}
           </label>
         )}
-        <div className="relative rounded-xl">
+        <div className="relative rounded-2xl">
           {leftIcon && (
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-salon-muted">
               {leftIcon}
@@ -31,18 +31,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             className={twMerge(
               clsx(
-                "w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-salon-dark placeholder:text-salon-muted/60 transition-colors focus:outline-none focus:ring-2 focus:ring-salon-primary focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed",
-                leftIcon && "pl-10",
+                "w-full rounded-2xl border bg-white/90 px-4 py-2.5 text-sm text-salon-dark placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-rose-500/15 focus:border-rose-500 disabled:bg-gray-100 disabled:cursor-not-allowed shadow-sm",
+                leftIcon && "pl-11",
                 error
-                  ? "border-salon-danger focus:ring-salon-danger"
-                  : "border-salon-primary/20 hover:border-salon-primary/40",
+                  ? "border-rose-400 focus:ring-rose-400/20 focus:border-rose-600"
+                  : "border-rose-200/70 hover:border-rose-300",
                 className
               )
             )}
             {...props}
           />
         </div>
-        {error && <p className="text-xs text-salon-danger font-medium">{error}</p>}
+        {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
         {helperText && !error && <p className="text-xs text-salon-muted">{helperText}</p>}
       </div>
     );
@@ -50,3 +50,4 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = "Input";
+
